@@ -38,6 +38,12 @@ def main() -> int:
     path = os.path.join(out_dir, "entry.txt")
     with open(path, "w", encoding="utf-8", newline="") as f:
         f.write(LINE)
+    # Read the file back and confirm it holds exactly the line we meant to
+    # write, so a silent disk or encoding failure can never pass as success.
+    with open(path, "r", encoding="utf-8", newline="") as f:
+        if f.read() != LINE:
+            print("entry.txt does not match the entry line", file=sys.stderr)
+            return 1
     return 0
 
 
